@@ -1,0 +1,39 @@
+/**
+Given a List of words, return the words that can be typed using letters of alphabet on only one row's of American keyboard like the image below.
+
+
+American keyboard
+
+
+Example 1:
+Input: ["Hello", "Alaska", "Dad", "Peace"]
+Output: ["Alaska", "Dad"]
+Note:
+You may use one character in the keyboard more than once.
+You may assume the input string will only contain letters of alphabet.
+*/
+public class Solution {
+    public String[] findWords(String[] words) {
+     List<String> result= new ArrayList<String>();
+     String first = "qwertyuiop";//第一排
+     String second = "asdfghjkl";//第二排
+     String third = "zxcvbnm";//第三排
+     
+     for(int i=0;i<words.length;i++){//第一次是“hello”
+        boolean[] index={true,true,true};
+         for(int j=0;j<words[i].length();j++){//第一个是“h”
+             String word = words[i].toLowerCase();
+             
+             index[0]=index[0]&&first.contains(Character.toString(word.charAt(j)));
+             //word.charAt(j) is h, first.contains(h) is false, index[0] start with 1
+             index[1]=index[1]&&secondcontains(Character.toString(word.charAt(j)));
+             index[2]=index[2]&&third.contains(Character.toString(word.charAt(j)));
+         }
+         if(index[0]||index[1]||index[2]){
+             result.add(words[i]);//看三排中有没有一排是符合的
+         }
+     }
+     String[] res = result.toArray(new String[0]);//把list转换成String[]
+     return res;
+    }
+}
