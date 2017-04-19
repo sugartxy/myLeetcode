@@ -1,0 +1,39 @@
+/**
+Given an arbitrary ransom note string and another string containing letters from all the magazines, write a function that will return true if the ransom note can be constructed from the magazines ; otherwise, it will return false.
+
+Each letter in the magazine string can only be used once in your ransom note.
+
+Note:
+You may assume that both strings contain only lowercase letters.
+
+canConstruct("a", "b") -> false
+canConstruct("aa", "ab") -> false
+canConstruct("aa", "aab") -> true
+*/
+public class Solution {
+    public boolean canConstruct(String ransomNote, String magazine) {
+    //"" is an actual string, albeit an empty one. null, however, means that the String variable points to nothing.
+        /**
+         * If the difference you are wondering about is == versus equals, it's this:
+
+== compares references, like if I went
+
+String a = new String("");
+String b = new String("");
+System.out.println(a==b);
+That would output false because I allocated two different objects, and a and b point to different objects.
+
+However, a.equals(b) in this case would return true, because equals for Strings will return true if and only if the argument String is not null and represents the same sequence of characters.
+
+
+         */
+        int[] letter=new int[26];
+        for(int i=0;i<magazine.length();i++){
+            letter[magazine.charAt(i)-'a']++;
+        }
+        for(int j=0;j<ransomNote.length();j++){
+            if(--letter[ransomNote.charAt(j)-'a']<0) return false;
+        }
+        return true;
+    }
+}
