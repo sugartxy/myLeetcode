@@ -1,0 +1,48 @@
+package LeetCode;
+public class StringGroup {
+	private static String stringGroup(String source, int k) {
+		int len = source.length();
+		int numGroup = len/k; 
+		int maxLen = len+numGroup;
+		char[] chars = new char[maxLen];
+		int newLen = 0;
+		for(int i = 0; i<len;i++) {
+			if(source.charAt(i)!='-') {
+				chars[newLen++]=source.charAt(i);
+			}
+		}
+		int flag = 0;
+		int oldIndex = newLen-1;
+		numGroup = newLen/k;
+		for(int newIndex = newLen+numGroup-1;newIndex>=0;newIndex--) {
+			//System.out.println(newIndex+" "+String.copyValueOf(chars)+" "+oldIndex);
+			if(flag==4) {
+				chars[newIndex]='-';
+				flag = 0;
+			}else {
+				if(isLowwer(chars[oldIndex])) {
+					chars[newIndex]=toUpper(chars[oldIndex--]);
+				}else {
+					chars[newIndex]=chars[oldIndex--];
+				}
+				flag++;
+			}
+		}
+		return String.copyValueOf(chars,0,newLen+numGroup);
+	}
+	private static boolean isLowwer(char c) {
+		return c>='a'&&c<='z';
+	}
+	private static char toUpper(char c) {
+		int diff = c-'a';
+		return (char) ('A'+ diff);
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		String source="4-15oz-8Tr32";
+		int k = 4;
+		System.out.println(stringGroup(source,k));
+
+	}
+
+}
