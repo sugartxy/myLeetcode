@@ -1,0 +1,14 @@
+class Solution {
+    public int kEmptySlots(int[] flowers, int k) {
+        TreeSet<Integer> set = new TreeSet<>();
+        for(int day = 0; day<flowers.length;day++){
+            set.add(flowers[day]);
+            Integer pre = set.lower(flowers[day]);
+            Integer next = set.higher(flowers[day]);
+            if((pre!=null && flowers[day]-pre == k+1)||(next!=null && next - flowers[day] == k+1)){
+               return day+1; 
+            }
+        }
+        return -1;
+    }
+}
