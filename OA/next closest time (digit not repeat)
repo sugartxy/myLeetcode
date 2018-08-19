@@ -1,0 +1,65 @@
+package LeetCode;
+import java.util.*;
+public class NextClosestTimeII {
+	private static String nextTime(String input) {
+		int[] allowed = new int[4];
+		int i = 0;
+		for(char c:input.toCharArray()) {
+			if(c!=':') {
+				System.out.println(c);
+				allowed[i++]=c-'0';
+			}
+		}
+		int start = (allowed[0]*10+allowed[1])*60+(allowed[2]*10+allowed[3]);
+		int ans = start;
+		int elapse = 24*60+60;
+		int elapseCand = elapse;
+		
+		
+		Set<Integer> permu = new HashSet<>();
+		permutation(allowed,permu,0);
+//		for(Integer m : permu) {
+//			System.out.println(m);
+//		}
+		
+		
+		for(int cur : permu) {
+			elapseCand = cur-start<0?cur-start+24*60+60:cur-start;
+			if(elapseCand>0&&elapseCand<elapse) {
+				ans = cur;
+				elapse = elapseCand;
+			}
+		}
+		return String.format("%02d:%02d", ans/60,ans%60);
+	}
+	private static void permutation(int[] allowed, Set<Integer> permu, int index) {
+		//base case
+		if(index==allowed.length) {
+			int hour = allowed[0]*10+allowed[1];
+			int minute = allowed[2]*10+allowed[3];
+			if(hour<24&&minute<60) {
+				permu.add(hour*60+minute);
+			}
+			
+			return;
+		}
+		
+		//recursive
+		for(int i = index;i<allowed.length;i++) {
+			swap(allowed,i,index);
+			permutation(allowed,permu,index+1);
+			swap(allowed,i,index);
+		}
+	}
+	private static void swap(int[] allowed, int i, int j) {
+		int tmp = allowed[i];
+		allowed[i] = allowed[j];
+		allowed[j] = tmp;
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		System.out.println(nextTime("23:50"));
+	}
+
+}
