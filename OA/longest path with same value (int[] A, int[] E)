@@ -1,0 +1,43 @@
+public class Solution {
+    /**
+     * @param A: as indicated in the description
+     * @param E: as indicated in the description
+     * @return: Return the number of edges on the longest path with same value.
+     */
+    int ans;
+    public int LongestPathWithSameValue(int[] A, int[] E) {
+        List<List<Integer>> edges = new ArrayList<>();
+        int len = A.length;
+        for(int i = 0; i<=len;i++){
+            edges.add(new ArrayList());
+        }
+        for(int i = 0; i<len-1;i++){
+            edges.get(E[i*2]).add(E[i*2+1]);
+            edges.get(E[i*2+1]).add(E[i*2]);
+        }
+        ans = 0;
+        dfs(1,0,A,edges);
+        return ans;
+    }
+    private int dfs(int index, int father, int[] A, List<List<Integer>> edges){
+        int max = 0;
+        int second = 0;
+        for(int son: edges.get(index)){
+            if(son!=father){
+                if(A[son-1]==A[index-1]){
+                    int val = dfs(son, index, A, edges)+1;
+                    if(val>max){
+                        second = max;
+                        max = val;
+                    }else if(val>second){
+                        second = val;
+                    }
+                }else{
+                    dfs(son,index,A,edges);
+                }
+            }
+        }
+        ans = Math.max(ans, max+second);
+        return max;
+    }
+}
