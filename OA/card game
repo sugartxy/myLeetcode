@@ -1,0 +1,30 @@
+package LeetCode;
+
+public class CardGame {
+	public static boolean cardGame (int total_money, int total_damage , int[] costs, int[] damages){
+		int[] M = new int[total_money+1];
+		for(int i = 0; i<=costs.length;i++) {
+			for(int j = total_money;j>=0;j--) {
+				if(i==0||j==0) {
+					M[j] = 0;
+				}else {
+					if(j>=costs[i-1]) {
+						M[j] = Math.max(M[j], M[j-costs[i-1]]+damages[i-1]);
+					}
+				}
+			}
+		}
+		return M[total_money]>=total_damage;
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		int money =5;
+		int damage =3;
+		int[] costs = {4,5,1};
+		int[] damages = {1,2,3};
+		System.out.println(cardGame(money,damage,costs,damages));
+	}
+
+}
