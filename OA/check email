@@ -1,0 +1,42 @@
+package LeetCode;
+
+import java.util.*;
+
+public class CheckEmail {
+	private static int checkEmail(String[] emails) {
+		int count = 0;
+		Map<String,Integer> map = new HashMap<>();
+		for(int i = 0; i<emails.length;i++) {
+			StringBuilder sb = new StringBuilder();
+			int atIndex = emails[i].indexOf('@');
+			for(int j = 0;j<atIndex;j++) {
+				if(emails[i].charAt(j)=='+') {
+					break;
+				}
+				if(emails[i].charAt(j)=='.') {
+					continue;
+				}
+				sb.append(emails[i].charAt(j));
+			}
+			sb.append(emails[i].substring(atIndex));
+			String str = sb.toString();
+			System.out.println(str);
+			Integer num = map.get(str);
+			if(num == null) {
+				map.put(str, 1);
+			}else if(num == 1) {
+				count++;
+				map.put(str, 2);
+			}
+		}
+		return count;
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		String[] emails= {"a.b@example.com","dupli......cate@example.com","d.u.p.l.i.c.a.t.e@example.com","ab+work@example.com"};
+		System.out.println(checkEmail(emails));
+
+	}
+
+}
