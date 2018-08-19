@@ -1,0 +1,47 @@
+class Solution {
+    public int repeatedStringMatch(String A, String B) {
+        int count = 1;
+		StringBuilder sb = new StringBuilder(A);
+		while(sb.length()<B.length()) {
+			sb.append(A);
+			count++;
+		}
+		int prime = 31, largePrime = 101;
+		int seed = 1;
+		int targetHash = B.charAt(0)%largePrime;
+		for(int i = 1;i<B.length();i++) {
+			seed = hash(seed,0,prime,largePrime);
+			targetHash = hash(targetHash, B.charAt(i),prime,largePrime);
+		}
+		int hash = 0;
+		for(int i = 0; i<B.length();i++) {
+			hash = hash(hash, sb.charAt(i),prime, largePrime);
+		}
+		if(hash == targetHash && match(sb, 0, B)) {
+			return count;
+		}
+		sb.append(A);
+		for(int i = 1;i<= sb.length()-B.length();i++) {
+			hash = nonNegative(hash-seed*sb.charAt(i-1)%largePrime,largePrime);
+			hash = hash(hash, sb.charAt(i+B.length()-1),prime, largePrime);
+			if(hash == targetHash && match(sb,i, B)) {
+				return i<=count*A.length()-B.length()?count:count+1;
+			}
+		}
+		return -1;
+	}
+	private boolean match(StringBuilder large, int index, String small) {
+		for(int i = 0; i<small.length();i++) {
+			if(small.charAt(i)!=large.charAt(index+i)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	private int hash(int hash, int addition, int prime, int largePrime) {
+		return (hash*prime%largePrime+addition)%largePrime;
+	}
+	private int nonNegative(int hash, int largePrime) {
+		return hash<0?hash+=largePrime:hash;
+	}
+}
