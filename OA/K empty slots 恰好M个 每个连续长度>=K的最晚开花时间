@@ -1,0 +1,87 @@
+package LeetCode;
+
+import java.util.*;
+public class KEmptySlotsIII {
+
+	static int numComponent = 0;
+	private static int kEmptySlots(int[] flowers, int k, int m) {
+		
+		int size[] = new int[flowers.length+1];
+		Map<Integer, Integer> map = new HashMap<>();
+		int ans=-1;
+		for(int day = 0; day<flowers.length;day++) {
+			map.put(flowers[day], flowers[day]);
+			size[flowers[day]]=1;
+			if(k<=1) {
+				numComponent++;
+			}
+			if(map.containsKey(flowers[day]-1)) {
+				union(map, flowers[day], flowers[day]-1, size, k);
+			}
+			if(map.containsKey(flowers[day]+1)) {
+				union(map, flowers[day], flowers[day]+1, size, k);
+			}
+			if(numComponent==m) {
+				ans = day+1;
+			}
+		}
+		return ans;
+	}
+	private static void union(Map<Integer, Integer> map, int i, int j, int[] size, int k) {
+		int root1 = find(i, map);
+		int root2 = find(j, map);
+		if(root1==root2) return;
+		int size1 = size[root1];
+		int size2 = size[root2];
+		int size3 = 0;
+		if(size[root1]>size[root2]) {
+			size[root1]+=size[root2];
+			size3 = size[root1];
+			map.put(root2, root1);
+		}else {
+			size[root2]+=size[root1];
+			size3=size[root2];
+			map.put(root1, root2);
+		}
+		
+		if(size3>=k) {
+			if(size1>=k&&size2>=k) {
+				numComponent--;
+			}else if(size1<k && size2<k) {
+				numComponent++;
+			}
+		}
+	}
+//	private static int getSize(int i, int[] size, Map<Integer, Integer> map) {
+//		return size[find(i, map)];
+//	}
+	private static int find(int i, Map<Integer, Integer> map) {
+		int root = i;
+		while(map.get(root)!=root) {
+			root = map.get(root);
+		}
+		
+		while(i!=root) {
+			int next = map.get(i);
+			map.put(i, root);
+			i = next;
+		}
+		
+		return root;
+	}
+	
+//	private static void print(Map<Integer, Integer> map) {
+//		System.out.println("begin");
+//		for(Integer k: map.keySet()) {
+//			System.out.println(k+" "+map.get(k));
+//		}
+//	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int[] flowers = {1,5,2,4,3};
+		int k = 2;
+		int m = 2;
+		System.out.println(kEmptySlots(flowers, k,m));
+	}
+
+}
